@@ -2,8 +2,8 @@
 Changelog for package realsense2_camera
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+4.56.3 (2024-10-31)
+-------------------
 * PR `#3239 <https://github.com/IntelRealSense/realsense-ros/issues/3239>`_ from SamerKhshiboun: Update CMakeLists.txt - remove find_package(fastrtps REQUIRED)
 * PR `#3225 <https://github.com/IntelRealSense/realsense-ros/issues/3225>`_ from SamerKhshiboun: Use new APIs for motion, accel and gryo streams
 * PR `#3222 <https://github.com/IntelRealSense/realsense-ros/issues/3222>`_ from SamerKhshiboun: Support D555 and its motion profiles
