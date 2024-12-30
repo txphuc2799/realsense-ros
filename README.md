@@ -1,68 +1,37 @@
-# ROS Wrapper for Intel&reg; RealSense&trade; Devices
-These are packages for using Intel RealSense cameras (D400 series SR300 camera and T265 Tracking Module) with ROS.
-
-This version supports Kinetic, Melodic and Noetic distributions.
-
-For running in ROS2 environment please switch to the [ros2-development branch](https://github.com/IntelRealSense/realsense-ros/tree/ros2-development). </br>
-
-LibRealSense2 supported version: v2.50.0 (see [realsense2_camera release notes](https://github.com/IntelRealSense/realsense-ros/releases))
-
 ## Installation Instructions
+Install librealsense2 debian package:
+   - Register the server's public key:
+   ```
+   sudo mkdir -p /etc/apt/keyrings
+   curl -sSf https://librealsense.intel.com/Debian/librealsense.pgp | sudo tee /etc/apt/keyrings/librealsense.pgp > /dev/null
+   ```
+   
+   - Make sure apt HTTPS support is installed:
+   `sudo apt-get install apt-transport-https`
+   
+   - Add the server to the list of repositories:
+   ```
+   echo "deb [signed-by=/etc/apt/keyrings/librealsense.pgp] https://librealsense.intel.com/Debian/apt-repo `lsb_release -cs` main" | \
+   sudo tee /etc/apt/sources.list.d/librealsense.list
+   sudo apt-get update
+   ```
+   
+   - Install the libraries (see section below if upgrading packages):  
+     `sudo apt-get install librealsense2-dkms`  
+     `sudo apt-get install librealsense2-utils`  
+     The above two lines will deploy librealsense2 udev rules, build and activate kernel modules, runtime library and executable demos and tools.
 
-### Ubuntu
-   #### Step 1: Install the ROS distribution
-   - #### Install [ROS Kinetic](http://wiki.ros.org/kinetic/Installation/Ubuntu), on Ubuntu 16.04, [ROS Melodic](http://wiki.ros.org/melodic/Installation/Ubuntu) on Ubuntu 18.04 or [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) on Ubuntu 20.04.
+   Reconnect the Intel RealSense depth camera and run: `realsense-viewer` to verify the installation.
 
-### Windows
-   #### Step 1: Install the ROS distribution
-   - #### Install [ROS Melodic or later on Windows 10](https://wiki.ros.org/Installation/Windows)
+## Upgrading the Packages:
+Refresh the local packages cache by invoking:  
+  `sudo apt-get update`  
 
-
-### There are 2 sources to install realsense2_camera from:
-
-* ### Method 1: The ROS distribution:
-
-  *Ubuntu*
-
-    realsense2_camera is available as a debian package of ROS distribution. It can be installed by typing:
-    
-    ```sudo apt-get install ros-$ROS_DISTRO-realsense2-camera```
-
-    This will install both realsense2_camera and its dependents, including librealsense2 library and matching udev-rules.
-
-    Notice:
-    * The version of librealsense2 is almost always behind the one available in the RealSense&trade; official repository.
-    * librealsense2 is not built to use native v4l2 driver but the less stable RS-USB protocol. That is because the last is more general and operational on a larger variety of platforms.
-    * realsense2_description is available as a separate debian package of ROS distribution. It includes the 3D-models of the devices and is necessary for running launch files that include these models (i.e. rs_d435_camera_with_model.launch). It can be installed by typing:
-    `sudo apt-get install ros-$ROS_DISTRO-realsense2-description`
-
-  *Windows*
-
-    **Chocolatey distribution Coming soon**
-
-* ### Method 2: The RealSense&trade; distribution:
-     > This option is demonstrated in the [.travis.yml](https://github.com/intel-ros/realsense/blob/ros1-legacy/.travis.yml) file. It basically summerize the elaborate instructions in the following 2 steps:
+Upgrade all the installed packages, including `librealsense` with:  
+  `sudo apt-get upgrade`
 
 
-   ### Step 1: Install the latest Intel&reg; RealSense&trade; SDK 2.0
-
-    *Ubuntu*
-    
-    Install librealsense2 debian package:
-    * Jetson users - use the [Jetson Installation Guide](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation_jetson.md)
-    * Otherwise, install from [Linux Debian Installation Guide](https://github.com/IntelRealSense/librealsense/blob/master/doc/distribution_linux.md#installing-the-packages)
-      - In that case treat yourself as a developer. Make sure you follow the instructions to also install librealsense2-dev and librealsense2-dkms packages.
-
-    *Windows* 
-    Install using vcpkg
-
-        `vcpkg install realsense2:x64-windows` 
-
-   #### OR
-   - #### Build from sources by downloading the latest [Intel&reg; RealSense&trade; SDK 2.0](https://github.com/IntelRealSense/librealsense/releases/tag/v2.50.0) and follow the instructions under [Linux Installation](https://github.com/IntelRealSense/librealsense/blob/master/doc/installation.md)
-
-
-   ### Step 2: Install Intel&reg; RealSense&trade; ROS from Sources
+## Install Intel&reg; RealSense&trade; ROS from Sources
    - Create a [catkin](http://wiki.ros.org/catkin#Installing_catkin) workspace
    *Ubuntu*
    ```bash
@@ -333,3 +302,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 **Other names and brands may be claimed as the property of others*
+
