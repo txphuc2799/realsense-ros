@@ -18,6 +18,7 @@
 #include <tf/transform_broadcaster.h>
 #include <tf2_ros/static_transform_broadcaster.h>
 #include <condition_variable>
+#include <std_msgs/Bool.h>
 
 #include <queue>
 #include <mutex>
@@ -303,6 +304,7 @@ namespace realsense2_camera
         std::map<stream_index_pair, std::vector<rs2::stream_profile>> _enabled_profiles;
 
         ros::Publisher _pointcloud_publisher;
+        ros::Publisher _pub_camera_finished;
         ros::Time _ros_time_base;
         bool _sync_frames;
         bool _pointcloud;

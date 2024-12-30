@@ -254,6 +254,11 @@ void BaseRealSenseNode::publishTopics()
     publishIntrinsics();
     startMonitoring();
     publishServices();
+
+    // Publish camera finished signal when start camera is successfully
+    std_msgs::Bool state_msg;
+    state_msg.data = true;
+    _pub_camera_finished.publish(state_msg);
     ROS_INFO_STREAM("RealSense Node Is Up!");
 }
 
@@ -950,12 +955,16 @@ void BaseRealSenseNode::setupDevice()
     catch(const std::exception& ex)
     {
         ROS_ERROR_STREAM("An exception has been thrown: " << ex.what());
-        throw;
+        // throw std::runtime_error("Runtime error: %s", ex.what());
+        ros::shutdown();
+        exit(1);
     }
     catch(...)
     {
         ROS_ERROR_STREAM("Unknown exception has occured!");
-        throw;
+        // throw std::runtime_error("Runtime error: Unknown exception has occured!");
+        ros::shutdown();
+        exit(1);
     }
 }
 
@@ -963,6 +972,8 @@ void BaseRealSenseNode::setupPublishers()
 {
     ROS_INFO("setupPublishers...");
     image_transport::ImageTransport image_transport(_node_handle);
+
+    _pub_camera_finished = _node_handle.advertise<std_msgs::Bool>("camera_startup_finished", 5);
 
     for (auto& stream : IMAGE_STREAMS)
     {
@@ -1871,12 +1882,14 @@ void BaseRealSenseNode::setupStreams()
     catch(const std::exception& ex)
     {
         ROS_ERROR_STREAM("An exception has been thrown: " << ex.what());
-        throw;
+        ros::shutdown();
+        exit(1);
     }
     catch(...)
     {
         ROS_ERROR_STREAM("Unknown exception has occured!");
-        throw;
+        ros::shutdown();
+        exit(1);
     }
 }
 
@@ -2405,6 +2418,7 @@ void BaseRealSenseNode::publishFrame(rs2::frame f, const ros::Time& t,
     if(0 != info_publisher.getNumSubscribers() ||
        0 != image_publisher.first.getNumSubscribers())
     {
+        // ROS_WARN("Da publish! %s",image_publisher.first.getTopic().c_str());
         auto& cam_info = camera_info.at(stream);
         if (cam_info.width != width)
         {
